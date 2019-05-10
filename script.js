@@ -31,7 +31,8 @@ $(document).ready(() => {
     let $engineerLoc = $("#current-engineer")
     let searchBy = $(`#${engineerId} h1`).text()[0]
     $.get(`https://swapi.co/api/people/?search=${searchBy}`, (resp) => {
-      let character = resp.results[Math.floor(Math.random() * resp.count)]
+      var resultsCount = resp.results.length
+      let character = resp.results[Math.floor(Math.random() * resultsCount)]
       let characterName = `
         <h2>Star Wars Character: ${character.name}</h2>
       `
