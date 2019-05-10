@@ -1,7 +1,7 @@
 $(document).ready(() => {
   var engineerIds = [];
   // use the api key and the sheet passed in
-  $.get(`https://sheets.googleapis.com/v4/spreadsheets//values:batchGet?key=AIzaSyDp3E9ot4dN7F-h8r_Ic6YCAv0P3EQ-eS4&ranges=sheet1&majorDimension=ROWS`, (resp) => {
+  $.get(`https://sheets.googleapis.com/v4/spreadsheets/1CJRNkEB2ImbiNrbW-1ceWQyOkiLXpPjXlpYcYLNuJ9E/values:batchGet?key=&ranges=sheet1&majorDimension=ROWS`, (resp) => {
     // make some json, this also happens async
     let sheetObjects = resp.valueRanges[0].values
     let $engineerDiv = $('#engineer-container')
@@ -29,8 +29,16 @@ $(document).ready(() => {
     let engineerId = engineerIds[index]
     let $currentEngineer = $(`#${engineerId}`)
     let $engineerLoc = $("#current-engineer")
-    $engineerLoc.empty()
-    $engineerLoc.append($currentEngineer)
-    engineerIds.splice(index, 1)
+    let searchBy = $(`#${engineerId} h1`).text()[0]
+    $.get(`https://swapi.co/api/people/?search=${searchBy}`, (resp) => {
+      let character = resp.results[Math.floor(Math.random() * resp.count)]
+      let characterName = `
+        <h2>Star Wars Character: ${character.name}</h2>
+      `
+      $engineerLoc.empty()
+      $currentEngineer.append(characterName)
+      $engineerLoc.append($currentEngineer)
+      engineerIds.splice(index, 1)
+    })
   })
 })
